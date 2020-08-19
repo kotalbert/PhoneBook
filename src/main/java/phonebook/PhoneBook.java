@@ -1,10 +1,10 @@
 package phonebook;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -16,41 +16,41 @@ public class PhoneBook {
     // number of found property
     // number on the list
 
-    private final Map<String, Integer> directory; // name - number directory
+    private final List<DirectoryEntry> directory;
 
     private PhoneBook() {
-        this.directory = new HashMap<>();
+        this.directory = new ArrayList<>();
     }
 
-    private PhoneBook(String phoneDirectoryFilename) throws IOException {
+    private PhoneBook(String phoneDirectoryFilename) {
         this();
         populateDirectory(phoneDirectoryFilename);
     }
 
-    private void populateDirectory(String phoneDirectoryFilename) throws IOException {
-         Path p = Path.of(getClass().getResource(phoneDirectoryFilename).getPath());
-         try (Stream<String> stream = Files.lines(p)) {
+    private void populateDirectory(String phoneDirectoryFilename) {
+        Path p = Path.of(getClass().getResource(phoneDirectoryFilename).getPath());
+        try (Stream<String> stream = Files.lines(p)) {
             stream.forEach(this::addToDirectory);
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addToDirectory(String line) {
         Scanner scanner = new Scanner(line);
         int number = scanner.nextInt();
         String name = scanner.nextLine();
-        directory.put(name, number);
+        directory.add(new DirectoryEntry(number, name));
     }
 
-    public static PhoneBook makeTestPhonebook() throws IOException {
+    public static PhoneBook makeTestPhonebook() {
         return new PhoneBook("/directory-short.txt");
     }
 
     private void showDirectoryHead(int n) {
         int c = 0;
-        for (String k : directory.keySet()) {
-            System.out.println(k + " " + directory.get(k));
+        for (DirectoryEntry de : directory) {
+            System.out.println(de);
             c++;
             if (c == n)
                 return;
@@ -58,10 +58,9 @@ public class PhoneBook {
     }
 
 
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         PhoneBook pb = PhoneBook.makeTestPhonebook();
-        pb.showDirectoryHead(2);
+        pb.showDirectoryHead(10);
     }
 
 

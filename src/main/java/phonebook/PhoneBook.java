@@ -47,21 +47,30 @@ public class PhoneBook {
         return new PhoneBook("/directory-short.txt");
     }
 
-    private void showDirectoryHead(int n) {
+    @Override
+    public String toString() {
+        return "PhoneBook{\n" +
+                getDirectoryHead(10) + "}";
+    }
+
+    private String getDirectoryHead(int n) {
+        StringBuilder sb = new StringBuilder();
         int c = 0;
         for (DirectoryEntry de : directory) {
-            System.out.println(de);
+            sb.append("\t").append(de).append("\n");
             c++;
             if (c == n)
-                return;
+                break;
         }
+        return sb.toString();
     }
 
 
     public static void main(String[] args) {
         PhoneBook pb = PhoneBook.makeTestPhonebook();
-        pb.showDirectoryHead(10);
+        System.out.println(pb);
     }
 
-
 }
+
+

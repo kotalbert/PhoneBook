@@ -1,8 +1,8 @@
 package phonebook;
 
 class DirectoryEntry {
-    private final int number;
-    private final String name;
+    public final int number;
+    public final String name;
 
     DirectoryEntry(int number, String name) {
         this.number = number;

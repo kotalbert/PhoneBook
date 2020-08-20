@@ -23,9 +23,10 @@ class SearchTask {
         queries = new ArrayList<>();
     }
 
-    private SearchTask(String searchTaskFileName) {
+    private SearchTask(String fileName) {
         this();
-        populateQueries(searchTaskFileName);
+        Path path = Path.of(PhoneBook.RESOURCES.toString(), fileName);
+        populateQueries(path);
     }
 
     public static SearchTask makeTestSearchTask() {
@@ -53,9 +54,8 @@ class SearchTask {
         return queries;
     }
 
-    private void populateQueries(String searchTaskFileName) {
-        Path p = Path.of(getClass().getResource(searchTaskFileName).getPath());
-        try (Stream<String> stream = Files.lines(p)) {
+    private void populateQueries(Path path) {
+        try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(queries::add);
         } catch (IOException e) {
             e.printStackTrace();

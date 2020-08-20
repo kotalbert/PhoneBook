@@ -15,13 +15,16 @@ public class PhoneBook {
 
     private final List<DirectoryEntry> directory;
 
+    public final static Path RESOURCES = Path.of("/home/pd/","IdeaProjects/jba_resources/Phone_Book");
+
     private PhoneBook() {
         this.directory = new ArrayList<>();
     }
 
-    private PhoneBook(String phoneDirectoryFilename) {
+    private PhoneBook(String fileName) {
         this();
-        populateDirectory(phoneDirectoryFilename);
+        Path path = Path.of(RESOURCES.toString(), fileName);
+        populateDirectory(path);
     }
 
     public static PhoneBook makeTestPhonebook() {
@@ -29,12 +32,11 @@ public class PhoneBook {
     }
 
     public static PhoneBook makePhonebook() {
-        return new PhoneBook("/directory.txt");
+        return new PhoneBook("directory.txt");
     }
 
-    private void populateDirectory(String phoneDirectoryFilename) {
-        Path p = Path.of(getClass().getResource(phoneDirectoryFilename).getPath());
-        try (Stream<String> stream = Files.lines(p)) {
+    private void populateDirectory(Path path) {
+        try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(this::addToDirectory);
         } catch (IOException e) {
             e.printStackTrace();

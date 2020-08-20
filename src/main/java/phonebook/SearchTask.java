@@ -8,62 +8,43 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Encapsulation of search algorithm as well as input search criteria.
+ * Defines what is to be looked for and stores results and time taken.
  */
 class SearchTask {
 
-    private final List<String> searchTask;
-    private PhoneBook phoneBook;
+    private final List<String> queries;
     private int numberFound;
     private long millisTaken;
 
-    private SearchTask(PhoneBook phoneBook) {
-        this.phoneBook = phoneBook;
-        searchTask = new ArrayList<>();
+    private SearchTask() {
+        queries = new ArrayList<>();
     }
 
-    private SearchTask(PhoneBook phoneBook, String searchTaskFileName) {
-        this(phoneBook);
-        populateSearchTask(searchTaskFileName);
+    private SearchTask(String searchTaskFileName) {
+        this();
+        populateQueries(searchTaskFileName);
     }
 
     public static SearchTask makeTestSearchTask() {
-        return new SearchTask(PhoneBook.makeTestPhonebook(), "/find-short.txt");
+        return new SearchTask("/find-short.txt");
     }
 
-    public static SearchTask makeSearchTask(PhoneBook phoneBook) {
-        return new SearchTask(phoneBook, "/find.txt");
+    public static SearchTask makeSearchTask() {
+        return new SearchTask("/find.txt");
     }
 
     public static void main(String[] args) {
         SearchTask st = SearchTask.makeTestSearchTask();
-        st.search();
         System.out.println(st);
     }
 
-    private void populateSearchTask(String searchTaskFileName) {
+    private void populateQueries(String searchTaskFileName) {
         Path p = Path.of(getClass().getResource(searchTaskFileName).getPath());
         try (Stream<String> stream = Files.lines(p)) {
-            stream.forEach(searchTask::add);
+            stream.forEach(queries::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Actual implementation of search algorithm.
-     */
-    public void search() {
-        long timeStart = System.currentTimeMillis();
-        for (String query : searchTask) {
-            if (phoneBook.isPresent(query)) {
-                numberFound++;
-            }
-            if (numberFound == searchTask.size())
-                break;
-        }
-        millisTaken = System.currentTimeMillis() - timeStart;
-
     }
 
     private int seconds() {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -27,6 +26,10 @@ public class PhoneBook {
 
     public static PhoneBook makeTestPhonebook() {
         return new PhoneBook("/directory-short.txt");
+    }
+
+    public static PhoneBook makePhonebook() {
+        return new PhoneBook("/directory.txt");
     }
 
     private void populateDirectory(String phoneDirectoryFilename) {
@@ -63,10 +66,12 @@ public class PhoneBook {
         return sb.toString();
     }
 
+    /**
+     * Search current PhoneBook and update SearchTask instance with results and time taken.
+     */
+    public void search(SearchTask searchTask) {
 
-    public static void main(String[] args) {
-        PhoneBook pb = PhoneBook.makeTestPhonebook();
-        System.out.println(pb);
+
     }
 
     public boolean isPresent(String query) {
@@ -77,10 +82,12 @@ public class PhoneBook {
         return false;
     }
 
-    public static PhoneBook makePhonebook() {
-        return new PhoneBook("/directory.txt");
+    public static void main(String[] args) {
+        PhoneBook pb = PhoneBook.makeTestPhonebook();
+        SearchTask searchTask = SearchTask.makeTestSearchTask();
+        pb.search(searchTask);
+        System.out.println(searchTask);
     }
-
 }
 
 

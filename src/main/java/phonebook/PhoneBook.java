@@ -80,7 +80,7 @@ public class PhoneBook {
 
     }
 
-    public boolean isPresent(String query) {
+   private boolean isPresent(String query) {
         for (DirectoryEntry de : directory) {
             if (de.name.equals(query))
                 return true;

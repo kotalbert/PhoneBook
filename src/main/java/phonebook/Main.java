@@ -5,7 +5,8 @@ public class Main {
         PhoneBook pb = PhoneBook.makePhonebook();
         SearchTask task = SearchTask.makeSearchTask();
         System.out.println("Start searching...");
-        System.out .println(task);
+        pb.search(task);
+        System.out.println(task);
 
 
     }

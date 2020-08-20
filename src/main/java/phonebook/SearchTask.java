@@ -3,6 +3,8 @@ package phonebook;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,19 +16,8 @@ class SearchTask {
 
     private final List<String> queries;
     private int numberFound;
-    private long millisTaken;
-
-    public void timeStart() {
-        millisTaken = System.currentTimeMillis();
-    }
-
-    public void timeStop() {
-        millisTaken = System.currentTimeMillis() - millisTaken;
-    }
-
-    List<String> getQueries() {
-        return queries;
-    }
+    private Instant start;
+    private Duration elapsed;
 
     private SearchTask() {
         queries = new ArrayList<>();
@@ -50,6 +41,18 @@ class SearchTask {
         System.out.println(st);
     }
 
+    void timeStart() {
+        start = Instant.now();
+    }
+
+    void timeStop() {
+        elapsed = Duration.between(start, Instant.now());
+    }
+
+    List<String> getQueries() {
+        return queries;
+    }
+
     private void populateQueries(String searchTaskFileName) {
         Path p = Path.of(getClass().getResource(searchTaskFileName).getPath());
         try (Stream<String> stream = Files.lines(p)) {
@@ -58,26 +61,19 @@ class SearchTask {
             e.printStackTrace();
         }
     }
-
-    private int seconds() {
-        return (int) (millisTaken / 1000) % 60;
-    }
-
-    private int minutes() {
-        return (int) ((millisTaken / (1000 * 60)) % 60);
-    }
-
     @Override
     public String toString() {
-        return "SearchTask{" +
-                "numberFound=" + numberFound +
-                ", millisTaken=" + millisTaken +
-                ", minutes=" + minutes() +
-                ", seconds=" + seconds() +
-                '}';
+        return String.format("Found %d/%d entries. Time taken: %d min. %d sec. %d ms.",
+                numberFound,
+                queries.size(),
+                elapsed.toMinutesPart(),
+                elapsed.toSecondsPart(),
+                elapsed.toMillisPart()
+        );
+
     }
 
-    public void foundOne() {
+    void foundOne() {
         numberFound++;
     }
 }

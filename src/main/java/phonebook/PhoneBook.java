@@ -70,7 +70,13 @@ public class PhoneBook {
      * Search current PhoneBook and update SearchTask instance with results and time taken.
      */
     public void search(SearchTask searchTask) {
-
+        searchTask.timeStart();
+        for (String query : searchTask.getQueries()) {
+            if (isPresent(query)) {
+                searchTask.foundOne();
+            }
+        }
+        searchTask.timeStop();
 
     }
 

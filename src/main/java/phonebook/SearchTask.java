@@ -16,6 +16,18 @@ class SearchTask {
     private int numberFound;
     private long millisTaken;
 
+    public void timeStart() {
+        millisTaken = System.currentTimeMillis();
+    }
+
+    public void timeStop() {
+        millisTaken = System.currentTimeMillis() - millisTaken;
+    }
+
+    List<String> getQueries() {
+        return queries;
+    }
+
     private SearchTask() {
         queries = new ArrayList<>();
     }
@@ -65,4 +77,7 @@ class SearchTask {
                 '}';
     }
 
+    public void foundOne() {
+        numberFound++;
+    }
 }

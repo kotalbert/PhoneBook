@@ -76,6 +76,11 @@ public class PhoneBook {
         }
         return false;
     }
+
+    public static PhoneBook makePhonebook() {
+        return new PhoneBook("/directory.txt");
+    }
+
 }
 
 

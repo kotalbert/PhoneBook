@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 
 /**
  * Defines what is to be looked for and stores results and time taken.
+ *
+ * Elapsed time is calculated from initialization, but can be reset to now().
  */
 class SearchTask {
 
@@ -21,6 +23,7 @@ class SearchTask {
 
     private SearchTask() {
         queries = new ArrayList<>();
+        start = Instant.now();
     }
 
     private SearchTask(String fileName) {
@@ -37,12 +40,7 @@ class SearchTask {
         return new SearchTask("/find.txt");
     }
 
-    public static void main(String[] args) {
-        SearchTask st = SearchTask.makeTestSearchTask();
-        System.out.println(st);
-    }
-
-    void timeStart() {
+    public void resetTimer() {
         start = Instant.now();
     }
 
@@ -61,6 +59,7 @@ class SearchTask {
             e.printStackTrace();
         }
     }
+
     @Override
     public String toString() {
         return String.format("Found %d/%d entries. Time taken: %d min. %d sec. %d ms.",
@@ -72,8 +71,12 @@ class SearchTask {
         );
 
     }
-
     void foundOne() {
         numberFound++;
+    }
+
+    public static void main(String[] args) {
+        SearchTask st = SearchTask.makeTestSearchTask();
+        System.out.println(st);
     }
 }

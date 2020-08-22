@@ -13,9 +13,8 @@ import java.util.stream.Stream;
  */
 public class PhoneBook {
 
+    public final static Path RESOURCES = Path.of("/home/pd/", "IdeaProjects/jba_resources/Phone_Book");
     private final List<DirectoryEntry> directory;
-
-    public final static Path RESOURCES = Path.of("/home/pd/","IdeaProjects/jba_resources/Phone_Book");
 
     private PhoneBook() {
         this.directory = new ArrayList<>();
@@ -28,11 +27,18 @@ public class PhoneBook {
     }
 
     public static PhoneBook makeTestPhonebook() {
-        return new PhoneBook("/directory-short.txt");
+        return new PhoneBook("directory-short.txt");
     }
 
     public static PhoneBook makePhonebook() {
         return new PhoneBook("directory.txt");
+    }
+
+    public static void main(String[] args) {
+        PhoneBook pb = PhoneBook.makeTestPhonebook();
+        SearchTask searchTask = SearchTask.makeTestSearchTask();
+        pb.search(searchTask);
+        System.out.println(searchTask);
     }
 
     private void populateDirectory(Path path) {
@@ -72,7 +78,7 @@ public class PhoneBook {
      * Search current PhoneBook and update SearchTask instance with results and time taken.
      */
     public void search(SearchTask searchTask) {
-        searchTask.timeStart();
+        // elapsed time starts after searchTask initialization
         for (String query : searchTask.getQueries()) {
             if (isPresent(query)) {
                 searchTask.foundOne();
@@ -82,19 +88,12 @@ public class PhoneBook {
 
     }
 
-   private boolean isPresent(String query) {
+    private boolean isPresent(String query) {
         for (DirectoryEntry de : directory) {
             if (de.name.equals(query))
                 return true;
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        PhoneBook pb = PhoneBook.makeTestPhonebook();
-        SearchTask searchTask = SearchTask.makeTestSearchTask();
-        pb.search(searchTask);
-        System.out.println(searchTask);
     }
 }
 
